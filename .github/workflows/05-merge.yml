@@ -30,6 +30,7 @@ jobs:
     name: prod-train
     needs: dev-train
     runs-on: ubuntu-latest
+    environment: prod
     steps:
     - name: Check out repo
       uses: actions/checkout@main

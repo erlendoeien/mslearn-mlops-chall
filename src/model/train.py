@@ -69,7 +69,8 @@ def parse_args():
 
     # add arguments
     parser.add_argument("--training-data", dest="training_data", type=str)
-    parser.add_argument("--reg-rate", dest="reg_rate", type=float, default=0.01)
+    parser.add_argument("--reg-rate", 
+                        dest="reg_rate", type=float, default=0.01)
 
     # parse args
     args = parser.parse_args()

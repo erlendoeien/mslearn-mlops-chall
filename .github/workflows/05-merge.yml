@@ -41,4 +41,4 @@ jobs:
       with:
         creds: ${{secrets.AZURE_CREDENTIALS}}
     - name: Train model
-      run: az ml job create -f src/job.yml --set inputs.training_data.path="diabetes-prod-folder" --resource-group mlops-group --workspace-name aml-mlops-dev
+      run: az ml job create -f src/job.yml --set inputs.training_data.path="azureml:diabetes-prod-folder:1" --resource-group mlops-group --workspace-name aml-mlops-dev

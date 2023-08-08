@@ -1,0 +1,43 @@
+name: Main changes
+
+on: 
+  push:
+    branches:
+      - main
+
+# Create two jobs for the github action environments "dev" and "prod" where "prod" depends on "dev"
+# and will only run if "dev" passes. This is to ensure that the model is trained in the dev environment
+# before being trained in the prod environment.
+
+
+jobs:
+  dev-train:
+    name: dev-train
+    runs-on: ubuntu-latest
+    environment: dev
+    steps:
+    - name: Check out repo
+      uses: actions/checkout@main
+    - name: Install az ml extension
+      run: az extension add -n ml -y
+    - name: Azure login
+      uses: azure/login@v1
+      with:
+        creds: ${{secrets.AZURE_CREDENTIALS}}
+    - name: Train model
+      run: az ml job create -f src/job.yml --resource-group mlops-group --workspace-name aml-mlops-dev --stream
+  prod-train:
+    name: prod-train
+    needs: dev-train
+    runs-on: ubuntu-latest
+    steps:
+    - name: Check out repo
+      uses: actions/checkout@main
+    - name: Install az ml extension
+      run: az extension add -n ml -y
+    - name: Azure login
+      uses: azure/login@v1
+      with:
+        creds: ${{secrets.AZURE_CREDENTIALS}}
+    - name: Train model
+      run: az ml job create -f src/job.yml --set inputs.training_data.path="diabetes-prod-folder" --resource-group mlops-group --workspace-name aml-mlops-dev

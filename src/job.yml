@@ -10,6 +10,6 @@ inputs:
     type: uri_folder 
   reg_rate: 0.01
 environment: azureml:AzureML-sklearn-0.24-ubuntu18.04-py37-cpu@latest
-compute: azureml:testdev-vm
+compute: azureml:testdev-cluster
 experiment_name: mlops-chall-1a
 description: Test job run with CLI v2 for Chall 1

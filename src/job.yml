@@ -1,15 +1,15 @@
 $schema: https://azuremlschemas.azureedge.net/latest/commandJob.schema.json
 code: model
 command: >-
-  python train.py
-  --training-data ${{inputs.training_data}}/diabetes-dev.csv
-  --reg-rate ${{reg_rate}}
+  python train.py 
+  --training-data ${{inputs.training_data}}
+  --reg-rate ${{inputs.reg_rate}}
 inputs:
   training_data: 
+    path: azureml:diabetes-dev-folder:1
     type: uri_folder 
-    path: azureml:diabetes-dev-folder@latest
   reg_rate: 0.01
-environment: azureml:basic-env-scikit@latest
-compute: azureml:mslearn-mlops-job
-experiment_name: mlops-chall-1
+environment: azureml:AzureML-sklearn-0.24-ubuntu18.04-py37-cpu@latest
+compute: azureml:testdev-vm
+experiment_name: mlops-chall-1a
 description: Test job run with CLI v2 for Chall 1

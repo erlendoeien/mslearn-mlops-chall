@@ -42,16 +42,12 @@ jobs:
         creds: ${{secrets.AZURE_CREDENTIALS}}
     - name: Train model
       run: |
-        runid=$(az ml job create -f src/job.yml \
-                --set inputs.training_data.path=azureml:diabetes-prod-folder:1 \
-                -g mlops-group --workspace-name aml-mlops-dev)
+        runid=$(az ml job create -f src/job.yml --set inputs.training_data.path=azureml:diabetes-prod-folder:1 -g mlops-group --workspace-name aml-mlops-dev)
         echo "runid=$runid" >> "$GITHUB_ENV"
     - name: Register model
       run: |
         echo "runid=${{ env.runid }}" 
-        az ml model create -n diabetes-model-prod \
-          -p runs:/${{ env.runid }}/model --type mlflow_model \
-          -g mlops-group --workspace-name aml-mlops-dev 
+        az ml model create -n diabetes-model-prod -p runs:/${{ env.runid }}/model --type mlflow_model -g mlops-group --workspace-name aml-mlops-dev 
     - name: Deploy endpoint
       run: az ml online-deployment create -f src/deploy.yml --all-traffic --resource-group mlops-group --workspace-name aml-mlops-dev
     # - name: Test endpoint

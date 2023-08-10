@@ -47,7 +47,7 @@ jobs:
     - name: Register model
       run: |
         echo "runid=${{ env.runid }}" 
-        az ml model create -n diabetes-model-prod -p runs:/${{ env.runid }}/model --type mlflow_model -g mlops-group --workspace-name aml-mlops-dev 
+        az ml model create -n diabetes-model-prod -v 1 -p runs:/${{ env.runid }}/model/ --type mlflow_model -g mlops-group --workspace-name aml-mlops-dev 
     - name: Deploy endpoint
       run: az ml online-deployment create -f src/deploy.yml --all-traffic --resource-group mlops-group --workspace-name aml-mlops-dev
     # - name: Test endpoint

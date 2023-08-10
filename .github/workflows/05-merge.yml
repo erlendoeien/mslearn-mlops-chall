@@ -46,10 +46,10 @@ jobs:
         echo "runid=$runid" >> "$GITHUB_ENV"
     - name: Register model
       run: |
-        echo "runid=${{ env.runid }}" 
+        echo "model_path=runs:/${{ env.runid }}/model/" 
         sleep 30s
         az ml model create -n diabetes-model-prod -v 1 -p runs:/${{ env.runid }}/model/ -t mlflow_model -g mlops-group -w aml-mlops-dev 
-    - name: Deploy endpoint
-      run: az ml online-deployment create -f src/deploy.yml --all-traffic -g mlops-group -w aml-mlops-dev
-    # - name: Test endpoint
-    #   run: az ml online-endpoint invoke --name diabetes-endpoint --resource-group mlops-group --workspace-name aml-mlops-dev --request-file tests/datasets/deploy-test.csv 
+    - name: Create and deploy endpoint
+      run: |
+        az ml online-endpoint create -f src/endpoint.yaml -g mlops-group -w aml-mlops-dev
+        az ml online-deployment create -f src/deploy.yml --all-traffic -g mlops-group -w aml-mlops-dev
